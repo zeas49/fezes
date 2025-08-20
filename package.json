@@ -1,0 +1,106 @@
+{
+  "name": "sistema-matricula-frontend",
+  "version": "1.0.0",
+  "description": "Frontend do Sistema de Matrícula - Interface web moderna para gestão de alunos e cursos",
+  "main": "src/static/index.html",
+  "scripts": {
+    "start": "python src/main.py",
+    "dev": "python src/main.py",
+    "build": "npm run minify-css && npm run minify-js",
+    "minify-css": "cleancss -o src/static/styles.min.css src/static/styles.css",
+    "minify-js": "uglifyjs src/static/script.js -o src/static/script.min.js -c -m",
+    "watch-css": "chokidar 'src/static/*.css' -c 'npm run minify-css'",
+    "watch-js": "chokidar 'src/static/*.js' -c 'npm run minify-js'",
+    "watch": "concurrently \"npm run watch-css\" \"npm run watch-js\"",
+    "lint-css": "stylelint 'src/static/*.css'",
+    "lint-js": "eslint src/static/*.js",
+    "lint": "npm run lint-css && npm run lint-js",
+    "format": "prettier --write 'src/static/*.{html,css,js}'",
+    "serve": "http-server src/static -p 3000 -c-1",
+    "test": "echo \"Testes do frontend serão implementados aqui\" && exit 0",
+    "clean": "rm -f src/static/*.min.css src/static/*.min.js",
+    "docker:build": "docker build -t sistema-matricula .",
+    "docker:run": "docker run -p 5000:5000 sistema-matricula",
+    "docker:dev": "docker-compose up --build",
+    "docker:prod": "docker-compose -f docker-compose.prod.yml up --build",
+    "docker:stop": "docker-compose down",
+    "backup-db": "mysqldump -u matricula_user -p gestao_alunos > backup_$(date +%Y%m%d_%H%M%S).sql",
+    "setup-dev": "python -m venv venv && source venv/bin/activate && pip install -r requirements.txt && python src/populate_db.py"
+  },
+  "keywords": [
+    "flask",
+    "python",
+    "mysql",
+    "education",
+    "student-management",
+    "enrollment",
+    "web-application",
+    "responsive-design",
+    "rest-api"
+  ],
+  "author": {
+    "name": "Manus AI",
+    "email": "contato@manus.ai",
+    "url": "https://manus.ai"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seu-usuario/sistema-matricula.git"
+  },
+  "bugs": {
+    "url": "https://github.com/seu-usuario/sistema-matricula/issues"
+  },
+  "homepage": "https://github.com/seu-usuario/sistema-matricula#readme",
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0",
+    "python": ">=3.11.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "chokidar-cli": "^3.0.0",
+    "clean-css-cli": "^5.6.2",
+    "concurrently": "^8.2.2",
+    "eslint": "^8.57.0",
+    "http-server": "^14.1.1",
+    "prettier": "^3.2.5",
+    "stylelint": "^16.2.1",
+    "stylelint-config-standard": "^36.0.0",
+    "uglify-js": "^3.17.4"
+  },
+  "dependencies": {
+    "font-awesome": "^4.7.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "not ie 11"
+  ],
+  "config": {
+    "port": "5000",
+    "host": "0.0.0.0"
+  },
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "files": [
+    "src/",
+    "requirements.txt",
+    "README.md",
+    "INSTALACAO.md",
+    "database_setup.sql",
+    "config_mysql.py"
+  ],
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/seu-usuario"
+  },
+  "private": false,
+  "workspaces": [
+    "frontend/*"
+  ]
+}
+

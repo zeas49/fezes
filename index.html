@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Matrícula - Gestão de Alunos</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1><i class="fas fa-graduation-cap"></i> Sistema de Matrícula</h1>
+                <p>Gestão de Alunos e Cursos</p>
+            </div>
+            <div class="stats-container" id="statsContainer">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-number" id="totalAlunos">0</span>
+                        <span class="stat-label">Alunos</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-number" id="totalCursos">0</span>
+                        <span class="stat-label">Cursos</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="nav-tabs">
+            <button class="tab-button active" data-tab="alunos">
+                <i class="fas fa-user-graduate"></i> Alunos
+            </button>
+            <button class="tab-button" data-tab="cursos">
+                <i class="fas fa-book-open"></i> Cursos
+            </button>
+            <button class="tab-button" data-tab="matricula">
+                <i class="fas fa-plus-circle"></i> Nova Matrícula
+            </button>
+        </nav>
+
+        <!-- Tab Content -->
+        <main class="main-content">
+            <!-- Alunos Tab -->
+            <div class="tab-content active" id="alunos">
+                <div class="section-header">
+                    <h2><i class="fas fa-users"></i> Alunos Matriculados</h2>
+                    <button class="btn btn-primary" onclick="refreshAlunos()">
+                        <i class="fas fa-sync-alt"></i> Atualizar
+                    </button>
+                </div>
+                <div class="table-container">
+                    <table class="data-table" id="alunosTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nome</th>
+                                <th>Email</th>
+                                <th>Curso</th>
+                                <th>Data Matrícula</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="alunosTableBody">
+                            <!-- Dados serão carregados via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Cursos Tab -->
+            <div class="tab-content" id="cursos">
+                <div class="section-header">
+                    <h2><i class="fas fa-book-open"></i> Cursos Disponíveis</h2>
+                    <button class="btn btn-primary" onclick="refreshCursos()">
+                        <i class="fas fa-sync-alt"></i> Atualizar
+                    </button>
+                </div>
+                <div class="courses-grid" id="cursosGrid">
+                    <!-- Cursos serão carregados via JavaScript -->
+                </div>
+            </div>
+
+            <!-- Nova Matrícula Tab -->
+            <div class="tab-content" id="matricula">
+                <div class="section-header">
+                    <h2><i class="fas fa-plus-circle"></i> Nova Matrícula</h2>
+                </div>
+                <div class="form-container">
+                    <form id="matriculaForm" class="matricula-form">
+                        <div class="form-group">
+                            <label for="nomeAluno">
+                                <i class="fas fa-user"></i> Nome Completo
+                            </label>
+                            <input type="text" id="nomeAluno" name="nome" required 
+                                   placeholder="Digite o nome completo do aluno">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="emailAluno">
+                                <i class="fas fa-envelope"></i> Email
+                            </label>
+                            <input type="email" id="emailAluno" name="email" required 
+                                   placeholder="Digite o email do aluno">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="cursoAluno">
+                                <i class="fas fa-book"></i> Curso
+                            </label>
+                            <select id="cursoAluno" name="curso_id" required>
+                                <option value="">Selecione um curso</option>
+                                <!-- Opções serão carregadas via JavaScript -->
+                            </select>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-success btn-large">
+                            <i class="fas fa-save"></i> Matricular Aluno
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal para edição de aluno -->
+    <div class="modal" id="editModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-edit"></i> Editar Aluno</h3>
+                <button class="modal-close" onclick="closeEditModal()">&times;</button>
+            </div>
+            <form id="editForm" class="modal-form">
+                <input type="hidden" id="editAlunoId">
+                <div class="form-group">
+                    <label for="editNome">Nome Completo</label>
+                    <input type="text" id="editNome" name="nome" required>
+                </div>
+                <div class="form-group">
+                    <label for="editEmail">Email</label>
+                    <input type="email" id="editEmail" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="editCurso">Curso</label>
+                    <select id="editCurso" name="curso_id">
+                        <option value="">Selecione um curso</option>
+                    </select>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeEditModal()">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Salvar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Loading overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Carregando...</p>
+        </div>
+    </div>
+
+    <!-- Toast notifications -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
